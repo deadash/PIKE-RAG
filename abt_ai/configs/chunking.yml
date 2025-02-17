@@ -1,0 +1,61 @@
+# Environment Variable Setting
+################################################################################
+dotenv_path: abt_ai/.env
+
+
+# Logging Setting
+################################################################################
+log_root_dir: logs/abt_ai
+
+# experiment_name: would be used to create log_dir = log_root_dir/experiment_name/
+experiment_name: chunking
+
+
+# Input Document & Output Dir Setting
+################################################################################
+input_doc_setting:
+  doc_dir: data/abt_ai/contents
+
+output_doc_setting:
+  doc_dir: data/abt_ai/chunks
+
+
+# LLM Setting
+################################################################################
+llm_client:
+  module_path: pikerag.llm_client
+  # available class_name: AzureMetaLlamaClient, AzureOpenAIClient, HFMetaLlamaClient
+  class_name: OpenAIClient
+  args:
+    client_config:
+      base_url: "https://ai.gitee.com/v1"
+      #base_url: "https://api.siliconflow.cn/v1"
+
+  llm_config:
+    model: DeepSeek-R1-Distill-Qwen-32B
+    #model: Qwen/Qwen2.5-7B-Instruct
+    temperature: 0
+    # enable max_new_tokens when using llama model, response seems truncated without it
+    # max_new_tokens: 1024
+
+  cache_config:
+    # location: will be joined with log_dir to generate the full path;
+    #   if set to null, the experiment_name would be used
+    location_prefix: null
+    auto_dump: True
+
+
+# Splitter Setting
+################################################################################
+chunking_protocol:
+  module_path: pikerag.prompts.chunking
+  chunk_summary: chunk_summary_protocol_Chinese
+  chunk_summary_refinement: chunk_summary_refinement_protocol_Chinese
+  chunk_resplit: chunk_resplit_protocol_Chinese
+
+splitter:
+  separators:
+    - "\n"
+  is_separator_regex: False
+  chunk_size: 512
+  chunk_overlap: 0
